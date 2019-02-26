@@ -189,9 +189,9 @@
   urlbordercolor=orange,            % color for url links, only visible if colorlinks=true
   linkbordercolor=red,              % color for page links, only visible if colorlinks=true
   pdfborderstyle={/S/U/W 1},        % border style will be underline of width 1pt
-  pdftitle={PDF-Title},
+  pdftitle={Architektur/Implementierung Integrierter Systeme WS1819},
   pdfauthor={Markus Pesch},
-  pdfsubject={PDF-Subject},
+  pdfsubject={Flucky Server},
   pdfkeywords={},
   pdfcreator={pdflatex},
   pdfproducer={LaTeX with hyperref}
@@ -248,6 +248,7 @@
 % Definiere neue aliase um einmalig ein highlighting pro Sprache zu deklarieren
 % \newminted{<makroname>}{optionen} ist verfügbar unter "<makroname>code"
 \newminted{awk}{autogobble=true, breaklines=true, linenos=true}
+\newminted{bash}{autogobble=true, breaklines=true, linenos=false}
 \newminted{json}{autogobble=true, breaklines=true, linenos=true}
 \newminted{julia}{autogobble=true, breaklines=true, linenos=true}
 \newminted{r}{autogobble=true, breaklines=true, linenos=true}
@@ -258,6 +259,7 @@
 % Definiere neue Makros um automatisch Sourcecode aus Dateien zu highlighten.
 % \makroname{Dateipfad}
 \newmintedfile[inputawk]{awk}{autogobble=true, breaklines=true, linenos=true}
+\newmintedfile[inputbash]{bash}{autogobble=true, breaklines=true, linenos=false}
 \newmintedfile[inputjson]{json}{autogobble=true, breaklines=true, linenos=true}
 \newmintedfile[inputjulia]{julia}{autogobble=true, breaklines=true, linenos=true}
 \newmintedfile[inputr]{r}{autogobble=true, breaklines=true, linenos=true}
@@ -268,6 +270,7 @@
 % Definiere neues Makro um Sourcecoude einzeiler zu highlighten
 % \begin{awkcode} \end{awkcode}
 \newmintinline{awk}{autogobble=true, breaklines=true, linenos=true}
+\newmintinline{bash}{autogobble=true, breaklines=true, linenos=false}
 \newmintinline{json}{autogobble=true, breaklines=true, linenos=true}
 \newmintinline{julia}{autogobble=true, breaklines=true, linenos=true}
 \newmintinline{r}{autogobble=true, breaklines=true, linenos=true}
@@ -400,7 +403,7 @@
   % \fancyfoot    Fußzeile
   \fancyhead[L]{\rightmark}
   \fancyhead[R]{\includegraphics[width=4cm]{img/logo.png}}
-  \fancyfoot[L]{$<Modul>$ $<Semester>$ - $<Typ>$}
+  \fancyfoot[L]{Architektur/Implementierung Integrierter Systeme WS1819 - Flucky Server}
   \fancyfoot[C]{}
 
   % Pixelstärke der Kopf- und Fußzeilenlinie
@@ -417,7 +420,7 @@
 
   % Importiere weitere .tex Dokumente
   \include{./examples/examples}
-
+  \include{kapitel/flucky}
   % Aufzählung aller Bilder
   % \listoffigures
   % \newpage
@@ -431,5 +434,5 @@
   % \newpage
 
   % Literatur
-  % \printbibliography[heading=bibintoc]
+  \printbibliography[heading=bibintoc]
 \end{document}

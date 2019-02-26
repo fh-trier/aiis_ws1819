@@ -1,0 +1,1 @@
+root@asterix:~# sudo usermod --append --groups docker $USER

@@ -1,0 +1,89 @@
+# Git Auskunft über die spätere Architektur.
+# 1. Deprecared
+# 2. Stand-Alone
+version: '2'
+ # Abschnitt zu Definition der einzelnen Docker-Container
+services:
+  # Docker-Container flucky-deb-web. Der Name dient zum Ansprechen bei der Verwendung von docker-compose
+  flucky-dev-web:
+    # Das Docker-Image das genutzt werden soll.
+    # Hier wird das Image go-flucky-server in der Version 'latest' aus dem Namespace volkerraschek benutzt
+    image: volkerraschek/go-flucky-server:latest
+    # Der Docker-Container Name. Dient nur zum einfacheren Übersicht sofern docker ps verwendet wird
+    container_name: flucky-dev-web
+    # Mittels depends_on kann eine Abhängigkeit definiert werden. In dem Fall kann der Container nur verwendet
+    # werden, wenn der Container flucky-dev-db ausgeführt wird. Dies ist sie Datenbank die im späteren Abschnitt
+    # beschrieben wird
+    depends_on:
+      - flucky-dev-db
+    # Über environment können mehrere Umgebungsvariablen definiert werden. Diese Variablen sind innerhalb des
+    # Containers abrufbar. Der Server ließt diese Umgebungsvariablen aus um zu erfahren auf welche Datenbank
+    # er sich verbinden soll oder auf welchem Port er für Web-Anfragen lauschen soll.
+    environment:
+      - SERVER_PORT=${SERVER_PORT}              # Port des Web-Servers
+      - DATABASE_DRIVER=${DATABASE_DRIVER}      # Datenbank Verbindungstyp
+      - DATABASE_HOST=${PG_HOST}                # Datenbank Hostsystem (IP oder DNS-Name)
+      - DATABASE_PORT=${PG_INTERN_PORT}         # Datenbank Port
+      - DATABASE_NAME=${DATABASE_NAME}          # Datenbank Name
+      - DATABASE_SCHEMA=${DATABASE_SCHEMA}      # Datenbank Schema
+      - DATABASE_USER=${DATABASE_USER}          # Datenbank Benutzer
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}  # Datenbank Passwort
+      - TZ=${TZ}                                # Zeitzone
+    # Definition von virtuellen Netzwerken
+    networks:
+      fn_dev:             # fn_dev ist der Name des virtuellen Netzwerks
+        aliases:          # Definition von Netzwerk-Namen
+          - flucky-dev    # flucky-dev ist der DNS-Name des Containers im virtuellen netzwerk
+    # Sollte das Hostsystem neustarten, es im Container zu einem unerwarteten exit kommen,
+    # dann soll der Container wieder gestartet werden
+    restart: always
+    # Volumes sind Mountpoints. Dies können zwischen dem Hostsystem und dem Container eingerichtet werden
+    # oder auch von virtuellen Speichersystemen. In diesem Fall erhält der Container nur Leseberechtigungen (ro)
+    # auf die Datei localtime des Hostsystems.
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      # Docker-Container flucky-dev-db. Der Name dient zum Ansprechen bei der Verwendung von docker-compose.
+
+  # Es handelt sich hierbei um einen Postgresql-Container. Dieser beinhaltet die Datenbank.
+  flucky-dev-db:
+    # Der Docker-Container Name. Dient nur zum einfacheren Übersicht sofern docker ps verwendet wird
+    container_name: flucky-dev-db
+    # Definition der Umgebungsvariablen für den Datenbank-Container
+    environment:
+      - PGTZ=${TZ}                          # Zeitzone der Datenbank
+      - POSTGRES_PASSWORD=${PG_PASSWORD}    # Passwort des Benutzers POSTGRE_USER
+      - POSTGRES_USER=${PG_USER}            # Name eines Benutzers der SYS_ADMIN-Rechte erhält
+      - POSTGRES_DB=${PG_NAME}              # Name der Datenbank
+      - TZ=${TZ}                            # Zeitzone des Containers
+    # Definition des Images. Es wird hier ein Postgresql-Datenbank-Container in Version 10.0
+    # mit einem Alpine-Linux Dateisystem verwendet.
+    image: postgres:10.0-alpine
+    # Definition von virtuellen Netzwerken
+    networks:
+      fn_dev:             # fn_dev ist der Name des virtuellen Netzwerks
+        aliases:          # Definition von Netzwerk-Namen
+          - ${PG_HOST}    # DNS-Name des Containers im virtuellen netzwerk
+    # Ports gibt an, welche Ports des Hostsystems an den Container weitergeleitet werden,
+    # ähnlich wie bei einem Router. Am Ende jedes Eintrags kann das Protokoll optional definiert werden.
+    # Hier handelt es sich um das Protokoll TCP.
+    ports:
+      - ${PG_EXTERN_PORT}:${PG_INTERN_PORT}/tcp
+    # Sollte das Hostsystem neustarten, es im Container zu einem unerwarteten exit kommen,
+    # dann soll der Container wieder gestartet werden
+    restart: always
+    # Mountpoints
+    volumes:
+      - /etc/localtime:/etc/localtime:ro              # Leseberechtigungen (ro)  auf die Datei localtime des Hostsystems.
+      - flucky-dev-data:/var/lib/postgresql/data:rw   # Einbinden eines virtuellen Dateisystem mit dem Namen flucky-dev-data nter angegeben Pfad. Schreibberechtigung (rw)
+        # Definition des virtuellen Netzwerks, dass von den Containern benutzt wird
+
+networks:
+  fn_dev:
+    # external: true gibt an, dass das virtuelle Netzwerk nicht von
+    # docker-compose erstellt wird sondern von docker selber. Dadurch ist der Zugriff
+    # durch Container die nicht über dieses YAML-File definiert wurden möglich.
+    external: true
+      # Definition von virtuellen Speichersystemen
+volumes:
+  flucky-dev-data:
+    external: true
