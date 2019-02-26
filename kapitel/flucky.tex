@@ -30,11 +30,11 @@ Da der Server für Cloud-Architekturen entwickelt wurde, befindet sich in Kapite
 \label{sec:rest}
 \acrfull{acr:rest} bezeichnet ein Programmierparadigma für verteilte Systeme, insbesondere Webservices. Daher ist eine Implementierung nach \acrshort{acr:rest} sehr Sinnvoll, zu mal es sich bei solchen Daten oft um zustandslosen Daten\footcite{zustandslosigkeit} handelt.
 
-Es bietet die Möglichkeit mehrere Webservices auszuführen um die Last zu skalieren, sofern die einzelnen Geräte mit ihren Sensoren eine so hohe Datenflut erzeugen, dass ein einzelner Service unter den Anfragen zum erliegen kommen würde. Bei solch einem Szenario würde man von einem \Gls{gls:ddos} sprechen.
+Es bietet die Möglichkeit mehrere Webservices auszuführen um die Last zu skalieren, sofern die einzelnen Geräte mit ihren Sensoren eine so hohe Datenflut erzeugen, dass ein einzelner Service unter den Anfragen zum erliegen kommen würde. Bei solch einem Szenario würde man von einem \Gls{gls:ddos}-Angriff sprechen.
 
 Dabei bietet der Flucky-Webserver mehrere \acrshort{acr:rest}-Endknoten an, die auf unterschiedliche \Gls{gls:http-anfragemethoden} reagieren um nach dem \Gls{gls:crud}-Ansatz zu arbeiten.
 
-Nachfolgend sind alle \acrshort{acr:rest} -Endknoten mit Anfragemethode gelistet, dabei werden folgende Anfragemethoden vom Flucky-Server verwendet und stehen Clients zur verfügung.
+Nachfolgend sind alle \acrshort{acr:rest} -Endknoten mit Anfragemethode gelistet, dabei werden folgende Anfragemethoden vom Flucky-Server verwendet und stehen Clients zur Verfügung.
 
 \begin{description}[itemsep=0pt]
   \item[POST] Übergibt eine neue Ressource. Gleicht dem INSERT von RDBM-Systemen oder dem C (Create) des \acrshort{acr:crud}-Ansatzes.
@@ -48,23 +48,23 @@ Nachfolgend sind alle \acrshort{acr:rest} -Endknoten mit Anfragemethode gelistet
     \begin{longtable}{lllllll}
       \textbf{Typ} & \textbf{REST-Knoten} & \textbf{POST} & \textbf{GET} & \textbf{PUT} & \textbf{DELETE} & \textbf{Beschreibung} \\ \toprule
       \multirow{5}{*}{Camera Equals}  & /camera\_equals               & X & X & & X & Delete löscht ALLE Einträge   \\
-                                      & /camera\_equals/{datum}       &  & X & & X & Datum im Format YYYY-MM-DD     \\
-                                      & /camera\_equals/{von}/{bis}   &  & X & & X & Datum im Format YYYY-MM-DD     \\
-                                      & /camera\_equals/{id}          & X & & X & X & Die ID ist eine UUID          \\
-                                      & /camera\_equals/{sensor\_id}  &  & X & & X & Die ID ist eine UUID           \\ \midrule
+                                      & /camera\_equals/$\{$datum$\}$       &  & X & & X & Datum im Format YYYY-MM-DD     \\
+                                      & /camera\_equals/$\{$von$\}$/$\{$bis$\}$   &  & X & & X & Datum im Format YYYY-MM-DD     \\
+                                      & /camera\_equals/$\{$id$\}$          & X & & X & X & Die ID ist eine UUID          \\
+                                      & /camera\_equals/$\{$sensor\_id$\}$  &  & X & & X & Die ID ist eine UUID           \\ \midrule
       \multirow{5}{*}{Camera Sizes}   & /camera\_sizes                & X & X & & X & Delete löscht ALLE Einträge   \\
-                                      & /camera\_sizes/{datum}        &  & X & & X & Datum im Format YYYY-MM-DD     \\
-                                      & /camera\_sizes/{von}/{bis}    &  & X & & X & Datum im Format YYYY-MM-DD     \\
-                                      & /camera\_sizes/{id}           & X & & X & X & Die ID ist eine UUID          \\
-                                      & /camera\_sizes/{sensor\_id}   &  & X & & X & Die ID ist eine UUID           \\ \midrule
+                                      & /camera\_sizes/$\{$datum$\}$        &  & X & & X & Datum im Format YYYY-MM-DD     \\
+                                      & /camera\_sizes/$\{$von$\}$/$\{$bis$\}$    &  & X & & X & Datum im Format YYYY-MM-DD     \\
+                                      & /camera\_sizes/$\{$id$\}$           & X & & X & X & Die ID ist eine UUID          \\
+                                      & /camera\_sizes/$\{$sensor\_id$\}$   &  & X & & X & Die ID ist eine UUID           \\ \midrule
       \multirow{3}{*}{Devices}        & /devices                      & X & X & & X & Delete löscht ALLE Einträge   \\
-                                      & /camera\_sizes/{id}           & X & & X & X & Die ID ist eine UUID          \\
-                                      & /camera\_sizes/{sensor\_id}   &  & X & & X & Die ID ist eine UUID           \\ \midrule
+                                      & /camera\_sizes/$\{$id$\}$           & X & & X & X & Die ID ist eine UUID          \\
+                                      & /camera\_sizes/$\{$sensor\_id$\}$   &  & X & & X & Die ID ist eine UUID           \\ \midrule
       \multirow{5}{*}{Failnoises}     & /failnoises                   & X & X & & X & Delete löscht ALLE Einträge   \\
-                                      & /failnoises/{datum}           &  & X & & X & Datum im Format YYYY-MM-DD     \\
-                                      & /failnoises/{von}/{bis}       &  & X & & X & Datum im Format YYYY-MM-DD     \\
-                                      & /failnoises/{id}              & X & & X & X & Die ID ist eine UUID          \\
-                                      & /failnoises/{sensor\_id}      &  & X & & X & Die ID ist eine UUID           \\ \midrule
+                                      & /failnoises/$\{$datum$\}$           &  & X & & X & Datum im Format YYYY-MM-DD     \\
+                                      & /failnoises/$\{$von$\}$/$\{$bis$\}$       &  & X & & X & Datum im Format YYYY-MM-DD     \\
+                                      & /failnoises/$\{$id$\}$              & X & & X & X & Die ID ist eine UUID          \\
+                                      & /failnoises/$\{$sensor\_id$\}$      &  & X & & X & Die ID ist eine UUID           \\ \midrule
     \end{longtable}
   \end{table}
 
@@ -74,25 +74,25 @@ Nachfolgend sind alle \acrshort{acr:rest} -Endknoten mit Anfragemethode gelistet
     \begin{longtable}{lllllll}
       \textbf{Typ} & \textbf{REST-Knoten} & \textbf{POST} & \textbf{GET} & \textbf{PUT} & \textbf{DELETE} & \textbf{Beschreibung} \\ \toprule
       \multirow{5}{*}{Humidities}     & /humidities                   & X & X & & X & Delete löscht ALLE Einträge   \\
-                                      & /humidities/{datum}           &  & X & & X & Datum im Format YYYY-MM-DD     \\
-                                      & /humidities/{von}/{bis}       &  & X & & X & Datum im Format YYYY-MM-DD     \\
-                                      & /humidities/{id}              & X & & X & X & Die ID ist eine UUID          \\
-                                      & /humidities/{sensor\_id}      &  & X & & X & Die ID ist eine UUID           \\ \midrule
+                                      & /humidities/$\{$datum$\}$           &  & X & & X & Datum im Format YYYY-MM-DD     \\
+                                      & /humidities/$\{$von$\}$/$\{$bis$\}$       &  & X & & X & Datum im Format YYYY-MM-DD     \\
+                                      & /humidities/$\{$id$\}$              & X & & X & X & Die ID ist eine UUID          \\
+                                      & /humidities/$\{$sensor\_id$\}$      &  & X & & X & Die ID ist eine UUID           \\ \midrule
       \multirow{5}{*}{Knocks}         & /knocks                       & X & X & & X & Delete löscht ALLE Einträge   \\
-                                      & /knocks/{datum}               &  & X & & X & Datum im Format YYYY-MM-DD     \\
-                                      & /knocks/{von}/{bis}           &  & X & & X & Datum im Format YYYY-MM-DD     \\
-                                      & /knocks/{id}                  & X & & X & X & Die ID ist eine UUID          \\
-                                      & /knocks/{sensor\_id}          &  & X & & X & Die ID ist eine UUID           \\ \midrule
+                                      & /knocks/$\{$datum$\}$               &  & X & & X & Datum im Format YYYY-MM-DD     \\
+                                      & /knocks/$\{$von$\}$/$\{$bis$\}$           &  & X & & X & Datum im Format YYYY-MM-DD     \\
+                                      & /knocks/$\{$id$\}$                  & X & & X & X & Die ID ist eine UUID          \\
+                                      & /knocks/$\{$sensor\_id$\}$          &  & X & & X & Die ID ist eine UUID           \\ \midrule
       \multirow{5}{*}{Particulates10} & /particulates10               & X & X & & X & Delete löscht ALLE Einträge   \\
-                                      & /particulates10/{datum}       &  & X & & X & Datum im Format YYYY-MM-DD     \\
-                                      & /particulates10/{von}/{bis}   &  & X & & X & Datum im Format YYYY-MM-DD     \\
-                                      & /particulates10/{id}          & X & & X & X & Die ID ist eine UUID          \\
-                                      & /particulates10/{sensor\_id}  &  & X & & X & Die ID ist eine UUID           \\ \midrule
+                                      & /particulates10/$\{$datum$\}$       &  & X & & X & Datum im Format YYYY-MM-DD     \\
+                                      & /particulates10/$\{$von$\}$/$\{$bis$\}$   &  & X & & X & Datum im Format YYYY-MM-DD     \\
+                                      & /particulates10/$\{$id$\}$          & X & & X & X & Die ID ist eine UUID          \\
+                                      & /particulates10/$\{$sensor\_id$\}$  &  & X & & X & Die ID ist eine UUID           \\ \midrule
       \multirow{5}{*}{Particulates25} & /particulates25               & X & X & & X & Delete löscht ALLE Einträge   \\
-                                      & /particulates25/{datum}       &  & X & & X & Datum im Format YYYY-MM-DD     \\
-                                      & /particulates25/{von}/{bis}   &  & X & & X & Datum im Format YYYY-MM-DD     \\
-                                      & /particulates25/{id}          & X & & X & X & Die ID ist eine UUID          \\
-                                      & /particulates25/{sensor\_id}  &  & X & & X & Die ID ist eine UUID           \\ \midrule
+                                      & /particulates25/$\{$datum$\}$       &  & X & & X & Datum im Format YYYY-MM-DD     \\
+                                      & /particulates25/$\{$von$\}$/$\{$bis$\}$   &  & X & & X & Datum im Format YYYY-MM-DD     \\
+                                      & /particulates25/$\{$id$\}$          & X & & X & X & Die ID ist eine UUID          \\
+                                      & /particulates25/$\{$sensor\_id$\}$  &  & X & & X & Die ID ist eine UUID           \\ \midrule
     \end{longtable}
   \end{table}
 
@@ -102,16 +102,16 @@ Nachfolgend sind alle \acrshort{acr:rest} -Endknoten mit Anfragemethode gelistet
     \begin{longtable}{lllllll}
       \textbf{Typ} & \textbf{REST-Knoten} & \textbf{POST} & \textbf{GET} & \textbf{PUT} & \textbf{DELETE} & \textbf{Beschreibung} \\ \toprule
       \multirow{5}{*}{Temperatures}   & /temperatures                 & X & X & & X & Delete löscht ALLE Einträge   \\
-                                      & /temperatures/{datum}         &  & X & & X & Datum im Format YYYY-MM-DD     \\
-                                      & /temperatures/{von}/{bis}     &  & X & & X & Datum im Format YYYY-MM-DD     \\
-                                      & /temperatures/{id}            & X & & X & X & Die ID ist eine UUID          \\
-                                      & /temperatures/{sensor\_id}    &  & X & & X & Die ID ist eine UUID           \\ \midrule
+                                      & /temperatures/$\{$datum$\}$         &  & X & & X & Datum im Format YYYY-MM-DD     \\
+                                      & /temperatures/$\{$von$\}$/$\{$bis$\}$     &  & X & & X & Datum im Format YYYY-MM-DD     \\
+                                      & /temperatures/$\{$id$\}$            & X & & X & X & Die ID ist eine UUID          \\
+                                      & /temperatures/$\{$sensor\_id$\}$    &  & X & & X & Die ID ist eine UUID           \\ \midrule
 
       \multirow{5}{*}{Throughputs}    & /throughputs                  & X & X & & X & Delete löscht ALLE Einträge   \\
-                                      & /throughputs/{datum}          &  & X & & X & Datum im Format YYYY-MM-DD     \\
-                                      & /throughputs/{von}/{bis}      &  & X & & X & Datum im Format YYYY-MM-DD     \\
-                                      & /throughputs/{id}             & X & & X & X & Die ID ist eine UUID          \\
-                                      & /throughputs/{sensor\_id}     &  & X & & X & Die ID ist eine UUID           \\ \midrule
+                                      & /throughputs/$\{$datum$\}$          &  & X & & X & Datum im Format YYYY-MM-DD     \\
+                                      & /throughputs/$\{$von$\}$/$\{$bis$\}$      &  & X & & X & Datum im Format YYYY-MM-DD     \\
+                                      & /throughputs/$\{$id$\}$             & X & & X & X & Die ID ist eine UUID          \\
+                                      & /throughputs/$\{$sensor\_id$\}$     &  & X & & X & Die ID ist eine UUID           \\ \midrule
     \end{longtable}
     \caption{REST-Knoten}%
     \label{tbl:rest-knoten}
