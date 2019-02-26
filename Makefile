@@ -23,8 +23,8 @@ TEX_FILE:=${FILE}.tex
 
 # Hardlink Options
 FSD?=${HOME}/Dokumente/Studium/Fachschaftsdaten
-HARDLINK_PATH:=${FSD}
-HARDLINK_FILE:=index.pdf
+HARDLINK_PATH:=${FSD}/AIIS_-_Architektur-Implementierung_Integrierter_Systeme/Projekte/WS1819
+HARDLINK_FILE:=Flucky-Server.pdf
 
 # latexmk
 # compile the pdf file with latexmk
