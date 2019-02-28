@@ -74,7 +74,7 @@ services:
     # Mountpoints
     volumes:
       - /etc/localtime:/etc/localtime:ro              # Leseberechtigungen (ro)  auf die Datei localtime des Hostsystems.
-      - flucky-dev-data:/var/lib/postgresql/data:rw   # Einbinden eines virtuellen Dateisystem mit dem Namen flucky-dev-data nter angegeben Pfad. Schreibberechtigung (rw)
+      - flucky-dev-data:/var/lib/postgresql/data:rw   # Einbinden eines virtuellen Dateisystem mit dem Namen flucky-dev-data unter angegeben Pfad. Schreibberechtigung (rw)
         # Definition des virtuellen Netzwerks, dass von den Containern benutzt wird
 
 networks:
