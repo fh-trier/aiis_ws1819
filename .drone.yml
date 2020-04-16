@@ -1,0 +1,40 @@
+kind: pipeline
+type: docker
+name: latex
+
+steps:
+- name: build-latest
+  image: volkerraschek/container-latex:latest-ubuntu18.04
+  commands:
+  - make latexmk/index.pdf
+  when:
+    event:
+      exclude:
+      - tag
+
+
+- name: build-tagged
+  image: volkerraschek/container-latex:latest-ubuntu18.04
+  commands:
+  - make latexmk/index.pdf
+  environment:
+    VERSION: ${DRONE_TAG}
+  when:
+    repo:
+    - fh-trier/aiis_ws1819
+    event:
+    - tag
+
+- name: push-tagged
+  image: plugins/gitea-release
+  settings:
+    base_url: https://git.cryptic.systems
+    api_key:
+      from_secret: gitea_token
+    files:
+    - index.pdf
+  when:
+    repo:
+    - fh-trier/aiis_ws1819
+    event:
+    - tag
