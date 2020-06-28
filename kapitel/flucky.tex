@@ -1,11 +1,20 @@
 % <#>--------------------------------------------------<#>
 \section{Vorwort}%
 \label{sec:vorwort}
-Flucky ist ein Webserver, geschrieben in der Programmiersprache \href{https://golang.org/}{Go} (Golang). Dabei ist zu differenzieren zwischen dem Flucky-Server und der Flucky-CLI. Die Server Version nimmt Daten von Clients mittels REST entgegen und speichert diese in einer Datenbank ab. Die Flucky-CLI ist ein Client der die REST-API des Flucky-Servers nutzt um Daten zu übermitteln.
 
-Die API des Flucky-Servers ist dokumentiert und kann auch durch alternative CLI-Programme die REST beherrschen angesteuert werden.
+Flucky ist ein Webserver, geschrieben in der Programmiersprache
+\href{https://golang.org/}{Go} (Golang). Dabei ist zu differenzieren zwischen
+dem Flucky-Server und der Flucky-CLI. Die Server Version nimmt Daten von Clients
+mittels REST entgegen und speichert diese in einer Datenbank ab. Die Flucky-CLI
+ist ein Client der die REST-API des Flucky-Servers nutzt um Daten zu
+übermitteln.
 
-Der Quellcode der beiden Projekte stehen unter Apache 2.0 Lizenz\footcite{apache-licence} und sind auf \href{https://git.cryptic.systems}{git.cryptic.systems} gehostet.
+Die API des Flucky-Servers ist dokumentiert und kann auch durch alternative
+CLI-Programme die REST beherrschen angesteuert werden.
+
+Der Quellcode der beiden Projekte stehen unter Apache 2.0
+Lizenz \footcite{apache-licence} und sind auf
+\href{https://git.cryptic.systems}{git.cryptic.systems} gehostet.
 
 % <#>--------------------------------------------------<#>
 \section{Einleitung}%
@@ -16,24 +25,43 @@ Der Quellcode der beiden Projekte stehen unter Apache 2.0 Lizenz\footcite{apache
   \caption{Flucky-Maskottchen}
 \end{wrapfigure}
 
-Der Flucky-Webserver ist in der Programmiersprache Go (Golang) geschrieben und nutzt \Gls{gls:rest} als Kommunikation zwischen den Clients.
+Der Flucky-Webserver ist in der Programmiersprache Go (Golang) geschrieben und
+nutzt \Gls{gls:rest} als Kommunikation zwischen den Clients.
 
-Dabei ergeben sich mehrere \Gls{gls:rest}-Endknoten, an die der Client mittels unterschiedlichen HTTP-Anfragemethoden seine Daten schicken kann.
+Dabei ergeben sich mehrere \Gls{gls:rest}-Endknoten, an die der Client mittels
+unterschiedlichen HTTP-Anfragemethoden seine Daten schicken kann.
 
-Als Datenstruktur wird \Gls{gls:json} genutzt. Eine Beschreibung der JSON-Strukturen befindet sich in der \href{https://git.cryptic.systems/fh-trier/go-flucky-server/wiki}{Dokumentation} des Flucky-Servers.
+Als Datenstruktur wird \Gls{gls:json} genutzt. Eine Beschreibung der
+JSON-Strukturen befindet sich in der
+\href{https://git.cryptic.systems/fh-trier/go-flucky-server/wiki}{Dokumentation}
+des Flucky-Servers.
 
-Da der Server für Cloud-Architekturen entwickelt wurde, befindet sich in Kapitel Installation von Docker nicht nur eine Dokumentation der Installation des Servers, sondern auch eine wie der Server skaliert werden kann.
+Da der Server für Cloud-Architekturen entwickelt wurde, befindet sich in Kapitel
+Installation von Docker nicht nur eine Dokumentation der Installation des
+Servers, sondern auch eine wie der Server skaliert werden kann.
 
 % <#>------------------------------------------------<#>
 \section{REST-Endknoten - HTTP-Anfragemethoden}%
 \label{sec:rest}
-\acrfull{acr:rest} bezeichnet ein Programmierparadigma für verteilte Systeme, insbesondere Webservices. Daher ist eine Implementierung nach \acrshort{acr:rest} sehr Sinnvoll, zu mal es sich bei solchen Daten oft um zustandslosen Daten\footcite{zustandslosigkeit} handelt.
 
-Es bietet die Möglichkeit mehrere Webservices auszuführen um die Last zu skalieren, sofern die einzelnen Geräte mit ihren Sensoren eine so hohe Datenflut erzeugen, dass ein einzelner Service unter den Anfragen zum erliegen kommen würde. Bei solch einem Szenario würde man von einem \Gls{gls:ddos}-Angriff sprechen.
+\acrfull{acr:rest} bezeichnet ein Programmierparadigma für verteilte Systeme,
+insbesondere Webservices. Daher ist eine Implementierung nach
+\acrshort{acr:rest} sehr Sinnvoll, zu mal es sich bei solchen Daten oft um
+zustandslosen Daten\footcite{zustandslosigkeit} handelt.
 
-Dabei bietet der Flucky-Webserver mehrere \acrshort{acr:rest}-Endknoten an, die auf unterschiedliche \Gls{gls:http-anfragemethoden} reagieren um nach dem \Gls{gls:crud}-Ansatz zu arbeiten.
+Es bietet die Möglichkeit mehrere Webservices auszuführen um die Last zu
+skalieren, sofern die einzelnen Geräte mit ihren Sensoren eine so hohe Datenflut
+erzeugen, dass ein einzelner Service unter den Anfragen zum erliegen kommen
+würde. Bei solch einem Szenario würde man von einem \Gls{gls:ddos}-Angriff
+sprechen.
 
-Nachfolgend sind alle \acrshort{acr:rest} -Endknoten mit Anfragemethode gelistet, dabei werden folgende Anfragemethoden vom Flucky-Server verwendet und stehen Clients zur Verfügung.
+Dabei bietet der Flucky-Webserver mehrere \acrshort{acr:rest}-Endknoten an, die
+auf unterschiedliche \Gls{gls:http-anfragemethoden} reagieren um nach dem
+\Gls{gls:crud}-Ansatz zu arbeiten.
+
+Nachfolgend sind alle \acrshort{acr:rest} -Endknoten mit Anfragemethode
+gelistet, dabei werden folgende Anfragemethoden vom Flucky-Server verwendet und
+stehen Clients zur Verfügung.
 
 \begin{description}[itemsep=0pt]
   \item[POST] Übergibt eine neue Ressource. Gleicht dem INSERT von RDBM-Systemen oder dem C (Create) des \acrshort{acr:crud}-Ansatzes.
@@ -125,63 +153,135 @@ Nachfolgend sind alle \acrshort{acr:rest} -Endknoten mit Anfragemethode gelistet
   \caption{Beispiel einer HTTP-Transaktion}
 \end{wrapfigure}
 
-Bei jeder HTTP-Anfrage gibt es mehrere Abschnitte. Darunter den Abschnitt des Verbindungsaufbaus zum Server (\href{http://www.rvs.uni-bielefeld.de/~heiko/tcpip/tcpip_html_alt/kap_2_4.html}{TCP-Handshake}), die HTTP-Anfrage, die Serverantwort geteilt in HTTP-Header und den HTTP-Body als auch den Verbindungsabbau. Um \acrshort{acr:rest}-Endknoten anzusteuern sind jedoch die beiden Serverantwortbereiche von Bedeutung. Der HTTP-Body enthält je nach Anfragemethode einen Inhalt (Content). Im HTTP-Header dagegen stehen Informationen über den Server bzw. dem Client, die Verschlüsselung zwischen den beiden Kommunikationspartnern und einen HTTP-Statuscode der Auskunft über die Aktion des Aufrufs wiedergibt.
+Bei jeder HTTP-Anfrage gibt es mehrere Abschnitte. Darunter den Abschnitt des
+Verbindungsaufbaus zum Server
+(\href{http://www.rvs.uni-bielefeld.de/~heiko/tcpip/tcpip_html_alt/kap_2_4.html}{TCP-Handshake}),
+die HTTP-Anfrage, die Serverantwort geteilt in HTTP-Header und den HTTP-Body als
+auch den Verbindungsabbau. Um \acrshort{acr:rest}-Endknoten anzusteuern sind
+jedoch die beiden Serverantwortbereiche von Bedeutung. Der HTTP-Body enthält je
+nach Anfragemethode einen Inhalt (Content). Im HTTP-Header dagegen stehen
+Informationen über den Server bzw. dem Client, die Verschlüsselung zwischen den
+beiden Kommunikationspartnern und einen HTTP-Statuscode der Auskunft über die
+Aktion des Aufrufs wiedergibt.
 
-Der Inhalt bzw. die Ressource im HTTP-Body kann beispielsweise eine PDF-Datei oder ein Bild im .PNG-Format sein. Jedoch ist es auch möglich, einfachen Text zu übermitteln der eine (semi-)Struktur aufweist. Infrage kommt bei solchen Datenstrukturen beispielsweise \acrfull{acr:json} oder \acrfull{acr:xml}, wobei sich \acrshort{acr:json} durch seine semi-Struktur überwiegend durchgesetzt hat.
+Der Inhalt bzw. die Ressource im HTTP-Body kann beispielsweise eine PDF-Datei
+oder ein Bild im .PNG-Format sein. Jedoch ist es auch möglich, einfachen Text zu
+übermitteln der eine (semi-)Struktur aufweist. Infrage kommt bei solchen
+Datenstrukturen beispielsweise \acrfull{acr:json} oder \acrfull{acr:xml}, wobei
+sich \acrshort{acr:json} durch seine semi-Struktur überwiegend durchgesetzt hat.
 
-Um welche Art bzw. Dateityp es sich bei einer Ressource handelt wird über den Content-Type oder auch Media-Type im HTTP-Header definiert. Mögliche Werte für den \href{http://www.iana.org/assignments/media-types/media-types.xhtml}{Content-Type} wird von der \acrfull{acr:iana} standardisiert und veröffentlicht.
+Um welche Art bzw. Dateityp es sich bei einer Ressource handelt wird über den
+Content-Type oder auch Media-Type im HTTP-Header definiert. Mögliche Werte für
+den
+\href{http://www.iana.org/assignments/media-types/media-types.xhtml}{Content-Type}
+wird von der \acrfull{acr:iana} standardisiert und veröffentlicht.
 
-Über das Kommandozeilenprogramm cURL ist es möglich alle Anfragemethoden mit einem HTTP-Body zielgerichtet an einen Server zu senden. Nachfolgend werden exemplarisch die Befehle je nach Anfragemethode dokumentiert. Dabei handelt es sich um Temperaturdaten. Alle Befehle die über das Terminal (Bash) ausgeführt werden richten sich an einen Flucky-Server in der Version 0.0.3.
+Über das Kommandozeilenprogramm cURL ist es möglich alle Anfragemethoden mit
+einem HTTP-Body zielgerichtet an einen Server zu senden. Nachfolgend werden
+exemplarisch die Befehle je nach Anfragemethode dokumentiert. Dabei handelt es
+sich um Temperaturdaten. Alle Befehle die über das Terminal (Bash) ausgeführt
+werden richten sich an einen Flucky-Server in der Version 0.0.3.
 
 % >------------------------------------------------------<
 \subsubsection{GET}%
 \label{sec:rest.ansteuern.get}
-Als Vorgabe verwendet cURL automatisch die Anfragemethode GET. Wird in einem Terminal der nachfolgende Befehl abgesetzt, ruft cURL die über das erste Argument mitgegebene Adresse auf und gibt den HTTP-Body (Inhalt) in dem Terminal aus.
+
+Als Vorgabe verwendet cURL automatisch die Anfragemethode GET. Wird in einem
+Terminal der nachfolgende Befehl abgesetzt, ruft cURL die über das erste
+Argument mitgegebene Adresse auf und gibt den HTTP-Body (Inhalt) in dem Terminal
+aus.
 
 \inputbash{./bash/curl-get.sh}
 
-Der HTTP-Body enthält ein \acrshort{acr:json}. Wobei das \acrshort{acr:json} ein Text ist und über jeden herkömmlichen Parser eingelesen werden kann. Über den einfachen Aufruf von cURL werden keine zusätzlichen Informationen über die Kommunikationspartner, die Verschlüsselung oder den HTTP-Statuscode ausgegeben. Erweiterte Informationen über den Vorgang erhält man mit dem Flag \texttt{-v} oder auch \texttt{--verbose}.
+Der HTTP-Body enthält ein \acrshort{acr:json}. Wobei das \acrshort{acr:json} ein
+Text ist und über jeden herkömmlichen Parser eingelesen werden kann. Über den
+einfachen Aufruf von cURL werden keine zusätzlichen Informationen über die
+Kommunikationspartner, die Verschlüsselung oder den HTTP-Statuscode ausgegeben.
+Erweiterte Informationen über den Vorgang erhält man mit dem Flag \texttt{-v}
+oder auch \texttt{--verbose}.
 
 % >------------------------------------------------------<
 \subsubsection{POST}%
 \label{sec:rest.ansteuern.post}
-cURL ist ebenfalls in der Lage Daten an einen Server zu übermitteln. Dazu werden cURL zwei Parameter übergeben, einen zum setzten der Anfragemethode \texttt{--request POST} und zu zweiten \texttt{--data} eine Datei oder ein Inhalt (Content) der übermittelt werden soll.
 
-Im nachfolgenden Beispiel werden zwei erfasste Datensätze, die als \acrshort{acr:json} strukturiert sind, an einen Flucky-Server übermittelt. Dabei ist darauf zu achten, dass der \acrshort{acr:rest}-Knoten die Anfragemethode unterstützt (siehe Tabellenverzeichnis) und der HTTP-Body bzw. Inhalt oder auch Content richtig strukturiert ist, sodass der Server die Daten einwandfrei parsen kann.
+cURL ist ebenfalls in der Lage Daten an einen Server zu übermitteln. Dazu werden
+cURL zwei Parameter übergeben, einen zum setzten der Anfragemethode
+\texttt{--request POST} und zu zweiten \texttt{--data} eine Datei oder ein
+Inhalt (Content) der übermittelt werden soll.
+
+Im nachfolgenden Beispiel werden zwei erfasste Datensätze, die als
+\acrshort{acr:json} strukturiert sind, an einen Flucky-Server übermittelt. Dabei
+ist darauf zu achten, dass der \acrshort{acr:rest}-Knoten die Anfragemethode
+unterstützt (siehe Tabellenverzeichnis) und der HTTP-Body bzw. Inhalt oder auch
+Content richtig strukturiert ist, sodass der Server die Daten einwandfrei parsen
+kann.
 
 \inputbash{./bash/curl-post.sh}
 
-Dabei ist zu erkennen, dass die Objekt-Eigenschaft \texttt{temperature\_id} im zweiten JSON-Objekt fehlt. Da JSON semistrukturiert ist, können Objekt-Eigenschaften leer oder auch einfach weg gelassen werden. Der Server versucht fehlende Informationen selber zu ermitteln oder sendet dem Client einen 400 HTTP-Statuscode] zurück.
+Dabei ist zu erkennen, dass die Objekt-Eigenschaft \texttt{temperature\_id} im
+zweiten JSON-Objekt fehlt. Da JSON semistrukturiert ist, können
+Objekt-Eigenschaften leer oder auch einfach weg gelassen werden. Der Server
+versucht fehlende Informationen selber zu ermitteln oder sendet dem Client einen
+400 HTTP-Statuscode] zurück.
 
-HTTP-Statuscodes geben dem Client eine Rückmeldung über den Status ihrer HTTP-Anfrage. Bei einem HTTP-Statuscode der nicht zu den 200er Klasse gehört gibt cURL einen Fehler direkt im Terminal bzw. der Konsole aus.
+HTTP-Statuscodes geben dem Client eine Rückmeldung über den Status ihrer
+HTTP-Anfrage. Bei einem HTTP-Statuscode der nicht zu den 200er Klasse gehört
+gibt cURL einen Fehler direkt im Terminal bzw. der Konsole aus.
 
 % >------------------------------------------------------<
 \subsubsection{PUT}%
 \label{sec:rest.ansteuern.put}
-Ähnlich wie bei der Anfragemethode POST werden auch bei der Methode PUT Daten vom Client an den Server übermittelt. Allerdings richtet sich die Anfragemethode PUT an das Aktualisieren einer Ressource. Um cURL mitzuteilen einen PUT-Aufruf abzusetzen kann das Flag \texttt{--request PUT} gesetzt werden. Kennt der Anwender die eindeitige UUID der Ressource lässt sich der REST-Endknoten oft sematisch ableiten. Der Flucky-Server stellt ebenso einen REST-Endknoten zum aktualisieren von Ressourcen bereit. Siehe dazu das Tabellenverzeichnis.
 
-Im nachfolgendem Beispiel wird nur der Wert des Datensatzes mit der UUID c7299f17-78da-43c6-be1c-5c99ac909807 von 34.50 auf 30.50 aktualisiert. Es unterscheidet sich hier zum HTTP-Body der Anfragemethode POST, dass nicht alle Objekt-Eigenschaften vorhanden sind, sondern nur die die aktualisiert werden sollen.
+Ähnlich wie bei der Anfragemethode POST werden auch bei der Methode PUT Daten
+vom Client an den Server übermittelt. Allerdings richtet sich die Anfragemethode
+PUT an das Aktualisieren einer Ressource. Um cURL mitzuteilen einen PUT-Aufruf
+abzusetzen kann das Flag \texttt{--request PUT} gesetzt werden. Kennt der
+Anwender die eindeitige UUID der Ressource lässt sich der REST-Endknoten oft
+sematisch ableiten. Der Flucky-Server stellt ebenso einen REST-Endknoten zum
+aktualisieren von Ressourcen bereit. Siehe dazu das Tabellenverzeichnis.
+
+Im nachfolgendem Beispiel wird nur der Wert des Datensatzes mit der UUID
+c7299f17-78da-43c6-be1c-5c99ac909807 von 34.50 auf 30.50 aktualisiert. Es
+unterscheidet sich hier zum HTTP-Body der Anfragemethode POST, dass nicht alle
+Objekt-Eigenschaften vorhanden sind, sondern nur die die aktualisiert werden
+sollen.
 
 \inputbash{./bash/curl-put.sh}
 
 % >------------------------------------------------------<
 \subsubsection{DELETE}%
 \label{sec:rest.ansteuern.delete}
-Um Ressourcen zu löschen unterstützt cURL ebenso die Anfragemethode DELETE, \texttt{--request DELETE}. Dabei muss kein HTTP-Body angegeben werden, sondern nur der REST-Endknoten an dem der Aufruf ausgeführt werden soll. Beim absenden eines Aufrufs mit der Anfragemethode DELETE werden alle Daten gelöscht, die über die Anfragemethode GET abgerufen werden können. Daher ist es mit Vorsicht zu genießen einen DELETE-Aufruf abzusetzen! Im Tabellenverzeichnis sind alle REST-Endknoten die die Anfragemethode DELETE unterstützten aufgelistet.
 
-Nachfolgend wird der Temperatur-Datensatz mit der UUID c7299f17-78da-43c6-be1c-5c99ac909807 gelöscht.
+Um Ressourcen zu löschen unterstützt cURL ebenso die Anfragemethode DELETE,
+\texttt{--request DELETE}. Dabei muss kein HTTP-Body angegeben werden, sondern
+nur der REST-Endknoten an dem der Aufruf ausgeführt werden soll. Beim absenden
+eines Aufrufs mit der Anfragemethode DELETE werden alle Daten gelöscht, die über
+die Anfragemethode GET abgerufen werden können. Daher ist es mit Vorsicht zu
+genießen einen DELETE-Aufruf abzusetzen! Im Tabellenverzeichnis sind alle
+REST-Endknoten die die Anfragemethode DELETE unterstützten aufgelistet.
+
+Nachfolgend wird der Temperatur-Datensatz mit der UUID
+c7299f17-78da-43c6-be1c-5c99ac909807 gelöscht.
 
 \inputbash{./bash/curl-delete.sh}
 
 % #>----------------------------------------------------<#
 \subsection{JSON}%
 \label{sec:rest.json}
-Wie bereits im Kapitel REST-Endknoten erwähnt wird \acrshort{acr:json} als Datenstruktur verwendet. Nachfolgend werden alle Datenstrukturen in \acrshort{acr:json}-Format abgebildet und beschrieben.
+
+Wie bereits im Kapitel REST-Endknoten erwähnt wird \acrshort{acr:json} als
+Datenstruktur verwendet. Nachfolgend werden alle Datenstrukturen in
+\acrshort{acr:json}-Format abgebildet und beschrieben.
 
 % >------------------------------------------------------<
 \subsubsection{camera equals}%
 \label{sec:rest.json.camera_equals}
-Das nachfolgende \acrshort{acr:json}-Array enthält mehrere \acrshort{acr:json}-Objekte. Jedes Objekt bildet einen Datensatz ab bestehend aus mehreren Objekt-Eigenschaften. Der Datensatz beschreibt einen Vorgang bei dem ein Objekt mittels Kamera erfasst wird und wie hoch die prozentuale Übereinstimmung mit einem anderen Objekt ist.
+
+Das nachfolgende \acrshort{acr:json}-Array enthält mehrere
+\acrshort{acr:json}-Objekte. Jedes Objekt bildet einen Datensatz ab bestehend
+aus mehreren Objekt-Eigenschaften. Der Datensatz beschreibt einen Vorgang bei
+dem ein Objekt mittels Kamera erfasst wird und wie hoch die prozentuale
+Übereinstimmung mit einem anderen Objekt ist.
 
 \begin{jsoncode}
   [
@@ -212,7 +312,11 @@ Das nachfolgende \acrshort{acr:json}-Array enthält mehrere \acrshort{acr:json}-
 % >------------------------------------------------------<
 \subsubsection{camera size}%
 \label{sec:rest.json.camera_size}
-Das nachfolgende JSON-Array enthält mehrere JSON-Objekte. Jedes Objekt bildet einen Datensatz ab bestehend aus mehreren Objekt-Eigenschaften. Der Datensatz beschreibt einen Vorgang bei dem ein Objekt mittels Kamera auf Größe erfasst wird.
+
+Das nachfolgende JSON-Array enthält mehrere JSON-Objekte. Jedes Objekt bildet
+einen Datensatz ab bestehend aus mehreren Objekt-Eigenschaften. Der Datensatz
+beschreibt einen Vorgang bei dem ein Objekt mittels Kamera auf Größe erfasst
+wird.
 
 \begin{jsoncode}
   [
@@ -246,7 +350,11 @@ Das nachfolgende JSON-Array enthält mehrere JSON-Objekte. Jedes Objekt bildet e
 % >------------------------------------------------------<
 \subsubsection{checkpoints}%
 \label{sec:rest.json.checkpoints}
-Das nachfolgende JSON-Array enthält mehrere JSON-Objekte. Jedes Objekt bildet einen Datensatz ab bestehend aus mehreren Objekt-Eigenschaften. Der Datensatz beschreibt einen Vorgang bei dem ein Objekt einen Schalter passiert hat. Dies kann Beispielsweise zur Warenerkennug auf einem Fließband dienen.
+
+Das nachfolgende JSON-Array enthält mehrere JSON-Objekte. Jedes Objekt bildet
+einen Datensatz ab bestehend aus mehreren Objekt-Eigenschaften. Der Datensatz
+beschreibt einen Vorgang bei dem ein Objekt einen Schalter passiert hat. Dies
+kann Beispielsweise zur Warenerkennug auf einem Fließband dienen.
 
 \begin{jsoncode}
   [
@@ -281,7 +389,11 @@ Das nachfolgende JSON-Array enthält mehrere JSON-Objekte. Jedes Objekt bildet e
 % >------------------------------------------------------<
 \subsubsection{failnoises}%
 \label{sec:rest.json.failnoises}
-Das nachfolgende JSON-Array enthält mehrere JSON-Objekte. Jedes Objekt bildet einen Datensatz ab bestehend aus mehreren Objekt-Eigenschaften. Der Datensatz beschreibt einen Vorgang wie oft ein Sensor zwischen zwei Zeiträumen Fehlgeräusche ermittelt hat.
+
+Das nachfolgende JSON-Array enthält mehrere JSON-Objekte. Jedes Objekt bildet
+einen Datensatz ab bestehend aus mehreren Objekt-Eigenschaften. Der Datensatz
+beschreibt einen Vorgang wie oft ein Sensor zwischen zwei Zeiträumen
+Fehlgeräusche ermittelt hat.
 
 \begin{jsoncode}
   [
@@ -349,7 +461,10 @@ Das nachfolgende JSON-Array enthält mehrere JSON-Objekte. Jedes Objekt bildet e
 % >------------------------------------------------------<
 \subsubsection{knocks}%
 \label{sec:rest.json.knocks}
-Das nachfolgende JSON-Array enthält mehrere JSON-Objekte. Jedes Objekt bildet einen Datensatz ab bestehend aus mehreren Objekt-Eigenschaften. Der Datensatz beschreibt wie oft Geräusche innerhalb eines Messzeitraums erfasst wurden.
+
+Das nachfolgende JSON-Array enthält mehrere JSON-Objekte. Jedes Objekt bildet
+einen Datensatz ab bestehend aus mehreren Objekt-Eigenschaften. Der Datensatz
+beschreibt wie oft Geräusche innerhalb eines Messzeitraums erfasst wurden.
 
 \begin{jsoncode}
   [
@@ -386,7 +501,13 @@ Das nachfolgende JSON-Array enthält mehrere JSON-Objekte. Jedes Objekt bildet e
 % >------------------------------------------------------<
 \subsubsection{particulates10 und particulates25}%
 \label{sec:rest.json.particulates}
-Das nachfolgende JSON-Array enthält mehrere JSON-Objekte. Jedes Objekt bildet einen Datensatz ab bestehend aus mehreren Objekt-Eigenschaften. Dieses JSON-Array kann für alle REST-Endpunkte von particulates10 und particulates25 benutzt werden. Der Datensatz beschreibt die Messung der Feinstaubpartikelbelastung an einem Messzeitpunkt. Dabei wird hier in die Größen der Feinstaubpartikel in 10µ und 25µ unterschieden.
+
+Das nachfolgende JSON-Array enthält mehrere JSON-Objekte. Jedes Objekt bildet
+einen Datensatz ab bestehend aus mehreren Objekt-Eigenschaften. Dieses
+JSON-Array kann für alle REST-Endpunkte von particulates10 und particulates25
+benutzt werden. Der Datensatz beschreibt die Messung der
+Feinstaubpartikelbelastung an einem Messzeitpunkt. Dabei wird hier in die Größen
+der Feinstaubpartikel in 10µ und 25µ unterschieden.
 
 \begin{jsoncode}
   [
@@ -418,7 +539,10 @@ Das nachfolgende JSON-Array enthält mehrere JSON-Objekte. Jedes Objekt bildet e
 % >------------------------------------------------------<
 \subsubsection{temperature}%
 \label{sec:rest.json.temperature}
-Das nachfolgende JSON-Array enthält mehrere JSON-Objekte. Jedes Objekt bildet einen Datensatz ab bestehend aus mehreren Objekt-Eigenschaften. Ein Datensatz beschreibt die Messung der Temperatur durch einen Sensor an einem Zeitpunkt.
+
+Das nachfolgende JSON-Array enthält mehrere JSON-Objekte. Jedes Objekt bildet
+einen Datensatz ab bestehend aus mehreren Objekt-Eigenschaften. Ein Datensatz
+beschreibt die Messung der Temperatur durch einen Sensor an einem Zeitpunkt.
 
 \begin{jsoncode}
   [
@@ -449,7 +573,11 @@ Das nachfolgende JSON-Array enthält mehrere JSON-Objekte. Jedes Objekt bildet e
 % >------------------------------------------------------<
 \subsubsection{throughputs}%
 \label{sec:rest.json.throughputs}
-Das nachfolgende JSON-Array enthält mehrere JSON-Objekte. Jedes Objekt bildet einen Datensatz ab bestehend aus mehreren Objekt-Eigenschaften. Ein Datensatz beschreibt die Messung einer durchschnittlichen Durchflussmenge innerhalb eines Messzeitraums.
+
+Das nachfolgende JSON-Array enthält mehrere JSON-Objekte. Jedes Objekt bildet
+einen Datensatz ab bestehend aus mehreren Objekt-Eigenschaften. Ein Datensatz
+beschreibt die Messung einer durchschnittlichen Durchflussmenge innerhalb eines
+Messzeitraums.
 
 \begin{jsoncode}
   [
@@ -486,38 +614,74 @@ Das nachfolgende JSON-Array enthält mehrere JSON-Objekte. Jedes Objekt bildet e
 
 \section{Installation von Docker}%
 \label{sec:docker}
-Der Flucky-Server besitzt den Vorteil, dass durch die Programmiersprache Golang nur \textbf{eine} Binary, ohne zusätzlich abhängige Bibliotheken, durch den Kompiler kompiliert wird. Dieser ausführbare Datei ist somit sehr einfach auf anderen Systemen auszuführen da keine zusätzlichen Bibliotheken gebraucht werden. Momentan wird die Binary jedoch ausschließlich für x86\_64 Linux Architekturen kompiliert. Es gibt zusätzlich neben der Binary ein Docker-Image. Dadurch dieses Image ist es möglich die Binary auf anderen Architektur laufen zu lassen.
 
-Ein Docker-Image ermöglich das einfache ausrollen einer Applikation in eine bestehende Umgebung. Applikationen die auf Docker-Images basieren lassen sich in einer Cloud-Architektur ohne große Hürden skalieren. Allerdings muss die Applikation die Vorraussetzung erfüllen, nicht mit zustandsbehafteten Daten zu arbeiten. Zustandsbehaftete Daten sind jene, die über eine Session oder eine Transaktion übermittelt werden. Dies ist der Fall bei Datenbanken - \href{https://de.wikipedia.org/wiki/ACID}{ACID}. Der Flucky-Server jedoch ist genau auf den Umstand vorbreitet mit zustandslose Daten zu arbeiten. Flucky lässt sich daher horizontal als auch vertikal skalieren.
+Der Flucky-Server besitzt den Vorteil, dass durch die Programmiersprache Golang
+nur \textbf{eine} Binary, ohne zusätzlich abhängige Bibliotheken, durch den
+Kompiler kompiliert wird. Dieser ausführbare Datei ist somit sehr einfach auf
+anderen Systemen auszuführen da keine zusätzlichen Bibliotheken gebraucht
+werden. Momentan wird die Binary jedoch ausschließlich für x86\_64 Linux
+Architekturen kompiliert. Es gibt zusätzlich neben der Binary ein Docker-Image.
+Dadurch dieses Image ist es möglich die Binary auf anderen Architektur laufen zu
+lassen.
+
+Ein Docker-Image ermöglich das einfache ausrollen einer Applikation in eine
+bestehende Umgebung. Applikationen die auf Docker-Images basieren lassen sich in
+einer Cloud-Architektur ohne große Hürden skalieren. Allerdings muss die
+Applikation die Vorraussetzung erfüllen, nicht mit zustandsbehafteten Daten zu
+arbeiten. Zustandsbehaftete Daten sind jene, die über eine Session oder eine
+Transaktion übermittelt werden. Dies ist der Fall bei Datenbanken -
+\href{https://de.wikipedia.org/wiki/ACID}{ACID}. Der Flucky-Server jedoch ist
+genau auf den Umstand vorbreitet mit zustandslose Daten zu arbeiten. Flucky
+lässt sich daher horizontal als auch vertikal skalieren.
 
 % #>----------------------------------------------------<#
 \subsection{Vorraussetzung}%
 \label{sec:docker.vorraussetzung}
-Als Vorraussetzung wird das Kernelmodul cgroups \footcite{cgroups} benötigt. Daher werden gleich alle Betriebssysteme die nicht auf einem Linux Kernel in der Version 2.26+ basieren für die Installation von Docker ausgeschlossen. Es gibt jedoch auch für nicht Linux Kernel basierende Betriebssysteme wie Windows, Apple oder BSD die Möglichkeit Docker zu verwenden. Dazu muss eine Virtuelle-Maschine basierend auf dem Linux Kernel installiert werden.\footcite{moby}
+
+Als Vorraussetzung wird das Kernelmodul cgroups \footcite{cgroups} benötigt.
+Daher werden gleich alle Betriebssysteme die nicht auf einem Linux Kernel in der
+Version 2.26+ basieren für die Installation von Docker ausgeschlossen. Es gibt
+jedoch auch für nicht Linux Kernel basierende Betriebssysteme wie Windows, Apple
+oder BSD die Möglichkeit Docker zu verwenden. Dazu muss eine Virtuelle-Maschine
+basierend auf dem Linux Kernel installiert werden.\footcite{moby}
 
 % #>----------------------------------------------------<#
 \subsection{Installationsschritte}%
 \label{sec:docker.installation}
-Um Docker nun, je nach Diverat, zu installieren gibt es mehrere Möglichkeiten. Die einfachste Möglichkeit ist es Docker aus einem Entwickler-Repository zu installieren, jedoch steht dieses nicht für jedes Diverat zur Verfügung. Alternativ dazu kann das offizielle Repository des Diverats genutzt werden.
+
+Um Docker nun, je nach Diverat, zu installieren gibt es mehrere Möglichkeiten.
+Die einfachste Möglichkeit ist es Docker aus einem Entwickler-Repository zu
+installieren, jedoch steht dieses nicht für jedes Diverat zur Verfügung.
+Alternativ dazu kann das offizielle Repository des Diverats genutzt werden.
 
 % >------------------------------------------------------<
 \subsubsection{Arch Linux}%
 \label{sec:docker.installation.arch-linux}
-Unter Arch Linux kann Docker aus den offiziellen Paketquellen bezogen werden. Bei Arch Linux handelt es sich um ein \Gls{gls:rolling-release} System. Dadurch können schnell Aktualisierungen von Docker auf dem System eingespielt werden.
+
+Unter Arch Linux kann Docker aus den offiziellen Paketquellen bezogen werden.
+Bei Arch Linux handelt es sich um ein \Gls{gls:rolling-release} System. Dadurch
+können schnell Aktualisierungen von Docker auf dem System eingespielt werden.
 
 \inputbash{./bash/docker-arch-linux.sh}
 
 % >------------------------------------------------------<
 \subsubsection{Debian/Ubuntu/Linux Mint}%
 \label{sec:docker.installation.debian}
-Bei Debian Diveraten ist in den Paketquellen eine sehr alte Version von Docker hinterlegt. Aus dem Grund muss ein PPA ("Personal Package Archive") hinterlegt werden um von dort Docker als Softwarepaket im .deb Format zu beziehen und zu installieren
+
+Bei Debian Diveraten ist in den Paketquellen eine sehr alte Version von Docker
+hinterlegt. Aus dem Grund muss ein PPA ("Personal Package Archive") hinterlegt
+werden um von dort Docker als Softwarepaket im .deb Format zu beziehen und zu
+installieren
 
 \inputbash{./bash/docker-debian.sh}
 
 % >------------------------------------------------------<
 \subsubsection{Fedora/CentOS/RHEL}%
 \label{sec:docker.installation.fedora}
-Bei Fedora Diveraten ist es ähnlich wie bei Debian Diveraten. Hier muss auch ein zusätzliches Packages Archive für Docker hinzugefügt werden um die aktuellsten Versionen von Docker beziehen zu können.
+
+Bei Fedora Diveraten ist es ähnlich wie bei Debian Diveraten. Hier muss auch ein
+zusätzliches Packages Archive für Docker hinzugefügt werden um die aktuellsten
+Versionen von Docker beziehen zu können.
 
 \inputbash{./bash/docker-fedora.sh}
 
@@ -529,7 +693,13 @@ Nachfolgend werden einige Befehle von Docker erklärt die essentiell für den t�
 % #>----------------------------------------------------<#
 \subsection{docker run}%
 \label{sec:docker-befehle.run}
-Der \texttt{docker run} Befehl ist für Neulinge der mit Abstand schwierigste Befehl für den Einstieg, dennoch komm niemand um ihn herum. Im Nachfolgenden Beispiel wird ein nginx Server in der Version 1.13.8 basierend auf das Dateisystem Alpine-Linux mittels Docker-Image erstellt und gestartet. Man spricht ab diesem Zeitpunkt von einem Docker-Container. Für den Docker-Container wird eine Weiterleitung der Ports 80 und 443 durch das Hostsystem eingerichtet.
+
+Der \texttt{docker run} Befehl ist für Neulinge der mit Abstand schwierigste
+Befehl für den Einstieg, dennoch komm niemand um ihn herum. Im Nachfolgenden
+Beispiel wird ein nginx Server in der Version 1.13.8 basierend auf das
+Dateisystem Alpine-Linux mittels Docker-Image erstellt und gestartet. Man
+spricht ab diesem Zeitpunkt von einem Docker-Container. Für den Docker-Container
+wird eine Weiterleitung der Ports 80 und 443 durch das Hostsystem eingerichtet.
 
 \begin{bashcode}
   root@asterix:~# docker run --detach \
@@ -541,23 +711,36 @@ Der \texttt{docker run} Befehl ist für Neulinge der mit Abstand schwierigste Be
 % #>----------------------------------------------------<#
 \subsection{docker ps}%
 \label{sec:docker-befehle.ps}
-Der Befehl \texttt{docker ps} gibt eine Liste von allen Docker-Containern in der Konsole aus. Dabei enthält die Liste die Container-ID, den Namen des Docker-Images mit Version, der Befehl der in dem Container ausgeführt wird, wann er erstellt und gestartet wurde und die Ports die vom Hostsystem an den Container weitergeleitet wurden.
+
+Der Befehl \texttt{docker ps} gibt eine Liste von allen Docker-Containern in der
+Konsole aus. Dabei enthält die Liste die Container-ID, den Namen des
+Docker-Images mit Version, der Befehl der in dem Container ausgeführt wird, wann
+er erstellt und gestartet wurde und die Ports die vom Hostsystem an den
+Container weitergeleitet wurden.
 
 % #>----------------------------------------------------<#
 \subsection{docker logs}%
 \label{sec:docker-befehle.logs}
-Mittels \texttt{docker logs} ist es möglich sich die Logeinträge eines Docker-Containers in der Konsole ausgeben zu lassen. Das Flag \texttt{-f} oder \texttt{--follow} ermöglich einen Stream zu öffnen um neue Logeinträge fortlaufend in der Konsole zu erhalten. Mittels \texttt{Strg + C} kann der Stream unterbrochen werden.
+
+Mittels \texttt{docker logs} ist es möglich sich die Logeinträge eines
+Docker-Containers in der Konsole ausgeben zu lassen. Das Flag \texttt{-f} oder
+\texttt{--follow} ermöglich einen Stream zu öffnen um neue Logeinträge
+fortlaufend in der Konsole zu erhalten. Mittels \texttt{Strg + C} kann der
+Stream unterbrochen werden.
 
 % #>----------------------------------------------------<#
 \subsection{docker start/stop}%
 \label{sec:docker-befehle.start-stop}
-Möchte man einen Docker-Container stoppen kann dies mittels \texttt{docker stop} realisiert werden. Dies ist nur möglich bei laufenden Containern.
+
+Möchte man einen Docker-Container stoppen kann dies mittels \texttt{docker stop}
+realisiert werden. Dies ist nur möglich bei laufenden Containern.
 
 \begin{bashcode}
    root@asterix:~# docker stop nginx
 \end{bashcode}
 
-Zum starten eines bereits erstellen Containers der gestoppt ist muss der Befehl docker start verwendet werden.
+Zum starten eines bereits erstellen Containers der gestoppt ist muss der Befehl
+docker start verwendet werden.
 
 \begin{bashcode}
   root@asterix:~# docker start nginx
@@ -566,7 +749,11 @@ Zum starten eines bereits erstellen Containers der gestoppt ist muss der Befehl 
 % #>----------------------------------------------------<#
 \subsection{docker rm}%
 \label{sec:docker-befehle.rm}
-Um einen Container endgültig zu löschen wird docker rm verwendet. Hierbei ist es allerdings notwendig, dass der Container zuvor gestoppt wurde. Über die Option \texttt{-f} bzw. \texttt{--force} wird das ordentliche Herunterfahren des Containers unterdrückt.
+
+Um einen Container endgültig zu löschen wird docker rm verwendet. Hierbei ist es
+allerdings notwendig, dass der Container zuvor gestoppt wurde. Über die Option
+\texttt{-f} bzw. \texttt{--force} wird das ordentliche Herunterfahren des
+Containers unterdrückt.
 
 \begin{bashcode}
   root@asterix:~# docker rm nginx
@@ -575,22 +762,34 @@ Um einen Container endgültig zu löschen wird docker rm verwendet. Hierbei ist 
 % #>----------------------------------------------------<#
 \subsection{permission denied}%
 \label{sec:docker-befehle.permission_denied}
-Kommt es bei der Verwendung von Docker-Befehlen zu einem Fehler der auf mangelnde Berechtigungen hinweist, dann muss der aktuelle Benutzer der Gruppe docker hinzugefügt werden. Anschließend muss die Benutzer-Session durch erneutes anmelden geladen werden.
+
+Kommt es bei der Verwendung von Docker-Befehlen zu einem Fehler der auf
+mangelnde Berechtigungen hinweist, dann muss der aktuelle Benutzer der Gruppe
+docker hinzugefügt werden. Anschließend muss die Benutzer-Session durch erneutes
+anmelden geladen werden.
 
 \inputbash{./bash/docker-permission.sh}
 
 
 \section{docker-compose}%
 \label{sec:docker-compose}
-Das CLI-Programm docker-compose ist ein Programm um mehrere Docker-Container zu definieren, zu starten und zu verwalten. Das Programm nutzt YAML-Dateien\footcite{yaml} zur Konfiguration der Container. Das Starten der Container ist so über einen einzelnen Befehl möglich.
 
-Nachfolgend wird eine Konfigurationsdatei \texttt{docker-compose.yml} erläutert und der Umgang mit docker-compose beschrieben.
+Das CLI-Programm docker-compose ist ein Programm um mehrere Docker-Container zu
+definieren, zu starten und zu verwalten. Das Programm nutzt
+YAML-Dateien\footcite{yaml} zur Konfiguration der Container. Das Starten der
+Container ist so über einen einzelnen Befehl möglich.
+
+Nachfolgend wird eine Konfigurationsdatei \texttt{docker-compose.yml} erläutert
+und der Umgang mit docker-compose beschrieben.
 
 \begin{landscape}
   \inputbash{./bash/docker-compose.yaml}
 \end{landscape}
 
-Sicherlicht fragt man sich nun, was die geschweiften Klammern mit dem Dollar-Zeichen bedeuten. Dies sind Bash-Umgebungsvariablen die in der beiliegenden Datei \texttt{.env} definiert sind. Dies gibt bei größeren \texttt{docker-compose.yml}-Files etwas Felxibilität zurück.
+Sicherlicht fragt man sich nun, was die geschweiften Klammern mit dem
+Dollar-Zeichen bedeuten. Dies sind Bash-Umgebungsvariablen die in der
+beiliegenden Datei \texttt{.env} definiert sind. Dies gibt bei größeren
+\texttt{docker-compose.yml}-Files etwas Felxibilität zurück.
 
 Die beiliegende \texttt{.env} Datei enhält folgenden Inhalt.
 
@@ -613,7 +812,10 @@ Die beiliegende \texttt{.env} Datei enhält folgenden Inhalt.
 % #>----------------------------------------------------<#
 \subsection{Befehle von docker-compose im Überblick}%
 \label{sec:docker-compose.befehle}
-Da nun in einem beliebigen Verzeichnis die Dateien \texttt{.env} und \texttt{docker-compose.yml} vorhanden sind kann das Programm \texttt{docker-compose} zum Verwalten verwendet werden.
+
+Da nun in einem beliebigen Verzeichnis die Dateien \texttt{.env} und
+\texttt{docker-compose.yml} vorhanden sind kann das Programm
+\texttt{docker-compose} zum Verwalten verwendet werden.
 
 \begin{itemize}[itemsep=0pt]
   \item Die Container wie sie in dem YAML-File definiert sind zu starten reicht der Befehl \texttt{docker-compose up -d} aus. Das \texttt{-d} oder auch \texttt{--detached} steht dafür, dass der Container im Hintergrund gestartet werden soll.
@@ -626,9 +828,15 @@ Da nun in einem beliebigen Verzeichnis die Dateien \texttt{.env} und \texttt{doc
 % #>----------------------------------------------------<#
 \subsection{Skalierung}%
 \label{sec:docker-compose.skalierung}
-Wie bereits erwähnt ist es möglich Container zu skalieren. Jedoch müssen diese Zustandslos\footnotesize{zustandslosigkeit} sein. Der Flucky-Server ist darauf ausgelegt und daher ist es möglich diesen zu skalieren. Da eine \texttt{docker-compose.yml} als auch \texttt{.env}-Datei vorhanden ist, kann \texttt{docker-compose} verwendet werden um den Flucky-Server zu skalieren.
 
-Dazu reicht der Befehl \texttt{docker-compose scale flucky-deb-web=3} aus um drei weitere Container zu starten.
+Wie bereits erwähnt ist es möglich Container zu skalieren. Jedoch müssen diese
+Zustandslos\footnotesize{zustandslosigkeit} sein. Der Flucky-Server ist darauf
+ausgelegt und daher ist es möglich diesen zu skalieren. Da eine
+\texttt{docker-compose.yml} als auch \texttt{.env}-Datei vorhanden ist, kann
+\texttt{docker-compose} verwendet werden um den Flucky-Server zu skalieren.
+
+Dazu reicht der Befehl \texttt{docker-compose scale flucky-deb-web=3} aus um
+drei weitere Container zu starten.
 
 \begin{bashcode}
   root@asterix:~/workspace/docker-dev-flucky# docker-compose scale flucky-dev-web=3
