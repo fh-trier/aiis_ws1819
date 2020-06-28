@@ -1,24 +1,22 @@
-# UID/GID
-# UID or GID is the UNIX user ID or group ID of the user who executes
-# make. If the UID or GID is not passed as a make variable, an attempt
-# is made to determine it.
-UID?=$(shell id --user)
-GID?=$(shell id --group)
-
 # VERSION / RELEASE
 # If no version is specified as a parameter of make, the last git hash
 # value is taken.
 VERSION?=$(shell git describe --abbrev=0)+hash.$(shell git rev-parse --short HEAD)
-RELEASE?=1
 
-# CONTAINER_RUNTIME / BUILD_IMAGE
+# CONTAINER_RUNTIME
 # The CONTAINER_RUNTIME variable will be used to specified the path to a
-# container runtime. This is needed to start and run a container image defined
-# by the BUILD_IMAGE variable. The BUILD_IMAGE container serve as build
-# environment to execute the different make steps inside. Therefore, the bulid
-# environment requires all necessary dependancies to build this project.
+# container runtime. This is needed to start and run a container images.
 CONTAINER_RUNTIME?=$(shell which docker)
-BUILD_IMAGE:=volkerraschek/container-latex:latest-ubuntu18.04
+
+# BUILD_IMAGE
+# Definition of the container build image, in which the BInary are compiled from
+# source code
+BUILD_IMAGE_REGISTRY:=docker.io
+BUILD_IMAGE_NAMESPACE:=volkerraschek
+BUILD_IMAGE_NAME:=container-latex
+BUILD_IMAGE_VERSION:=latest-archlinux
+BUILD_IMAGE_FULL=${BUILD_IMAGE_REGISTRY}/${BUILD_IMAGE_NAMESPACE}/${BUILD_IMAGE_NAME}:${BUILD_IMAGE_VERSION}
+BUILD_IMAGE_SHORT=${BUILD_IMAGE_NAMESPACE}/${BUILD_IMAGE_NAME}:${BUILD_IMAGE_VERSION}
 
 # Input tex-file and output pdf-file
 FILE_NAME=index
@@ -26,20 +24,9 @@ IDX_TARGET:=${FILE_NAME:%=%.idx}
 PDF_TARGET:=${FILE_NAME:%=%.pdf}
 TEX_TARGET:=${FILE_NAME:%=%.tex}
 
-# HARDLINK_VARIABLES
-# FSD:           Defines the general storage location for study documents.
-# HARDLINK_PATH: This should be extended with the value from FSD. For example
-#                for the subject Mathematics: ${FSD}/Mathematics
-# HARDLINK_FILE: Name of the document to be linked under the path HARDLINK_PATH.
-FSD?=${HOME}/Dokumente/Studium/Fachschaftsdaten
-HARDLINK_PATH:=${FSD}/AIIS_-_Architektur-Implementierung_Integrierter_Systeme/Projekte/WS1819
-HARDLINK_FILE:=Flucky-Server.pdf
-
-
 # PDF_TARGET
 # ==============================================================================
 ${PDF_TARGET}: latexmk/${PDF_TARGET}
-
 
 PHONY:=latexmk/${PDF_TARGET}
 latexmk/${PDF_TARGET}:
@@ -62,31 +49,27 @@ pdflatex/${PDF_TARGET}:
 		-interaction=nonstopmode \
 		-enable-write18 ${TEX_TARGET}
 
-
 # CLEAN
 # ==============================================================================
 PHONY+=clean
 clean:
 	git clean -fX
 
-
 # CONTAINER STEPS - PDF_TARGET
 # ==============================================================================
 container-run/${PDF_TARGET}:
-	$(MAKE) container-run COMMAND=$(subst container-run/,,$@)
+	$(MAKE) container-run COMMAND=${@:container-run/%=%}
 
 container-run/latexmk/${PDF_TARGET}:
-	$(MAKE) container-run COMMAND=$(subst container-run/,,$@)
+	$(MAKE) container-run COMMAND=${@:container-run/%=%}
 
 container-run/pdflatex/${PDF_TARGET}:
-	$(MAKE) container-run COMMAND=$(subst container-run/,,$@)
-
+	$(MAKE) container-run COMMAND=${@:container-run/%=%}
 
 # CONTAINER STEPS - CLEAN
 # ==============================================================================
 container-run/clean:
-	$(MAKE) container-run COMMAND=$(subst container-run/,,$@)
-
+	$(MAKE) container-run COMMAND=${@:container-run/%=%}
 
 # GENERAL CONTAINER COMMAND
 # ==============================================================================
@@ -94,37 +77,11 @@ PHONY+=container-run
 container-run:
 	${CONTAINER_RUNTIME} run \
 		--rm \
-		--user ${UID}:${GID} \
+		--user $(shell id --user):${shell id --group} \
 		--volume $(shell pwd):/workspace \
-			${BUILD_IMAGE} \
+			${BUILD_IMAGE_SHORT} \
 				make ${COMMAND} \
 					VERSION=${VERSION} \
-					RELEASE=${RELEASE}
-
-
-# HARDLINK
-# ==============================================================================
-PHONY+=hardlink/create
-hardlink/create: hardlink/delete
-	if [ ! -d ${HARDLINK_PATH} ]; \
-	then \
-		mkdir -p ${HARDLINK_PATH}; \
-	fi;
-
-	if [ ! -f ${PDF_TARGET} ]; \
-	then \
-		echo "Compile the PDF file first!"; \
-	fi;
-
-	ln ${PDF_TARGET} ${HARDLINK_PATH}/${HARDLINK_FILE}
-
-PHONY+=hardlink/delete
-hardlink/delete:
-	if [ -f ${HARDLINK_PATH}/${HARDLINK_FILE} ]; \
-	then \
-		rm -R ${HARDLINK_PATH}/${HARDLINK_FILE}; \
-	fi;
-
 
 # PHONY
 # ==============================================================================
