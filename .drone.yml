@@ -11,7 +11,7 @@ steps:
 - name: build
   commands:
   - make latexmk/index.pdf
-  image: docker.io/volkerraschek/container-latex:latest-archlinux
+  image: docker.io/volkerraschek/latex:latest-archlinux
   resources:
     limits:
       cpu: 500
@@ -25,7 +25,7 @@ steps:
       from_secret: webdav_username
     WEBDAV_PASSWORD:
       from_secret: webdav_password
-  image: docker.io/volkerraschek/container-latex:latest-archlinux
+  image: docker.io/volkerraschek/latex:latest-archlinux
   resources:
     limits:
       cpu: 50
@@ -77,7 +77,7 @@ steps:
   - make latexmk/index.pdf
   environment:
     VERSION: ${DRONE_TAG}
-  image: docker.io/volkerraschek/container-latex:latest-archlinux
+  image: docker.io/volkerraschek/latex:latest-archlinux
   resources:
     limits:
       cpu: 500
@@ -91,7 +91,7 @@ steps:
       from_secret: webdav_username
     WEBDAV_PASSWORD:
       from_secret: webdav_password
-  image: docker.io/volkerraschek/container-latex:latest-archlinux
+  image: docker.io/volkerraschek/latex:latest-archlinux
   resources:
     limits:
       cpu: 50
