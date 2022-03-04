@@ -6,17 +6,16 @@ VERSION?=$(shell git describe --abbrev=0)+hash.$(shell git rev-parse --short HEA
 # CONTAINER_RUNTIME
 # The CONTAINER_RUNTIME variable will be used to specified the path to a
 # container runtime. This is needed to start and run a container images.
-CONTAINER_RUNTIME?=$(shell which docker)
+CONTAINER_RUNTIME?=$(shell which podman)
 
 # BUILD_IMAGE
 # Definition of the container build image, in which the BInary are compiled from
 # source code
 BUILD_IMAGE_REGISTRY:=docker.io
 BUILD_IMAGE_NAMESPACE:=volkerraschek
-BUILD_IMAGE_NAME:=container-latex
+BUILD_IMAGE_NAME:=latex
 BUILD_IMAGE_VERSION:=latest-archlinux
-BUILD_IMAGE_FULL=${BUILD_IMAGE_REGISTRY}/${BUILD_IMAGE_NAMESPACE}/${BUILD_IMAGE_NAME}:${BUILD_IMAGE_VERSION}
-BUILD_IMAGE_SHORT=${BUILD_IMAGE_NAMESPACE}/${BUILD_IMAGE_NAME}:${BUILD_IMAGE_VERSION}
+BUILD_IMAGE_FULLY_QUALIFIED=${BUILD_IMAGE_REGISTRY}/${BUILD_IMAGE_NAMESPACE}/${BUILD_IMAGE_NAME}:${BUILD_IMAGE_VERSION}
 
 # Input tex-file and output pdf-file
 FILE_NAME=index
@@ -77,9 +76,8 @@ PHONY+=container-run
 container-run:
 	${CONTAINER_RUNTIME} run \
 		--rm \
-		--user $(shell id --user):${shell id --group} \
 		--volume $(shell pwd):/workspace \
-			${BUILD_IMAGE_SHORT} \
+			${BUILD_IMAGE_FULLY_QUALIFIED} \
 				make ${COMMAND} \
 					VERSION=${VERSION} \
 
