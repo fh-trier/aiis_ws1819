@@ -1,7 +1,7 @@
 ---
 kind: pipeline
 type: kubernetes
-name: latest
+name: build-latest
 
 platform:
   os: linux
