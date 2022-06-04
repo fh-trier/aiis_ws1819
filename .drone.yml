@@ -12,9 +12,12 @@ steps:
   - make latexmk/index.pdf
   image: docker.io/volkerraschek/latex:latest-archlinux
   resources:
+    requests:
+      cpu: 250
+      memory: 500M
     limits:
       cpu: 500
-      memory: 250M
+      memory: 750M
 
 - name: push-nextcloud
   commands:
@@ -27,8 +30,8 @@ steps:
   image: docker.io/volkerraschek/latex:latest-archlinux
   resources:
     limits:
-      cpu: 50
-      memory: 25M
+      cpu: 150
+      memory: 150M
   when:
     repo:
     - fh-trier/aiis_ws1819
@@ -49,8 +52,8 @@ steps:
   image: docker.io/drillster/drone-email:latest
   resources:
     limits:
-      cpu: 50
-      memory: 25M
+      cpu: 150
+      memory: 150M
   when:
     status:
     - changed
@@ -77,9 +80,12 @@ steps:
     VERSION: ${DRONE_TAG}
   image: docker.io/volkerraschek/latex:latest-archlinux
   resources:
+    requests:
+      cpu: 250
+      memory: 500M
     limits:
       cpu: 500
-      memory: 250M
+      memory: 750M
 
 - name: push-nextcloud
   commands:
@@ -92,15 +98,15 @@ steps:
   image: docker.io/volkerraschek/latex:latest-archlinux
   resources:
     limits:
-      cpu: 50
-      memory: 25M
+      cpu: 150
+      memory: 150M
 
 - name: push-gitea
   image: docker.io/plugins/gitea-release:latest
   resources:
     limits:
-      cpu: 50
-      memory: 25M
+      cpu: 150
+      memory: 150M
   settings:
     base_url: https://git.cryptic.systems
     api_key:
@@ -128,8 +134,8 @@ steps:
   image: docker.io/drillster/drone-email:latest
   resources:
     limits:
-      cpu: 50
-      memory: 25M
+      cpu: 150
+      memory: 150M
   when:
     status:
     - changed
